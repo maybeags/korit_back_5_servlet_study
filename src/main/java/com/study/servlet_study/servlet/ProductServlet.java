@@ -31,20 +31,32 @@ public class ProductServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String productName = request.getParameter("productName");
-		String price = request.getParameter("price");
-		String size = request.getParameter("size");
-		String color = request.getParameter("color");
+		int price = 0;
+		
+		try {
+			price = Integer.parseInt(request.getParameter("price"));
+		} catch (NumberFormatException e) {
+			response.setStatus(400);
+			response.getWriter().println("숫자만 입력해야 합니다.");
+			return;
+		}
 		
 		Product product = Product.builder()
-				.productName(productName)
+				.productName(request.getParameter("productName"))
 				.price(price)
-				.size(size)
-				.color(color)
+				.size(request.getParameter("size"))
+				.color(request.getParameter("color"))
 				.build();
-		int body = productService.addProduct(product);
+		
+		if(productService.getProduct(product.getProductName()) != null) {
+			response.setStatus(400);
+			response.getWriter().println("이미 등록된 상품명입니다.");
+			return;
+		}
+		
+		productService.addProduct(product);
 		response.setStatus(201);
-		response.getWriter().println(body);
+		response.getWriter().println("상품 등록이 완료되었습니다.");
 	}
 
 }

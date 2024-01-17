@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class Product {
 	String productName;
-	String price;
+	int price;
 	String size;
 	String color;
 }

@@ -26,4 +26,6 @@ public class ProductService {
 	public Product getProduct(String productName) {
 		return productRepository.findProductByProductName(productName);
 	}
+	
+	
 }
